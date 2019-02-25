@@ -825,8 +825,9 @@ public abstract class AbstractController implements SerialCommunicatorListener, 
      */
     public void commandComplete(String response) throws UnexpectedCommand {
         if (this.activeCommands.isEmpty()) {
-            throw new UnexpectedCommand(
-                    Localization.getString("controller.exception.unexpectedCommand"));
+            return;
+            // throw new UnexpectedCommand(
+            //           Localization.getString("controller.exception.unexpectedCommand"));
         }
         
         GcodeCommand command = this.activeCommands.remove(0);

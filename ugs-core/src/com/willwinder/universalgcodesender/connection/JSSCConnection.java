@@ -23,9 +23,13 @@ import jssc.SerialPortEvent;
 import jssc.SerialPortEventListener;
 import jssc.SerialPortList;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.io.filefilter.WildcardFileFilter;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.ArrayList;
+import java.io.File;
+import java.io.FilenameFilter;
 
 /**
  * A serial connection object implementing the connection API.
@@ -90,7 +94,18 @@ public class JSSCConnection extends AbstractConnection implements SerialPortEven
 
     @Override
     public List<String> getPortNames() {
-        return Arrays.asList(SerialPortList.getPortNames());
+//        return Arrays.asList(SerialPortList.getPortNames());
+        List<String> results = new ArrayList<String>();
+        File folder = new File("/dev");
+        List<String> filter = new ArrayList<String>();
+        filter.add("tty.*usbmodem*");
+        filter.add("tty.*serial*");
+        filter.add("tty.*usbserial*");
+        FilenameFilter fileFilter = new WildcardFileFilter(filter);
+        File[] listOfFiles = folder.listFiles(fileFilter);
+        for (int i = 0; i < listOfFiles.length; i++)
+            results.add("/dev/"+listOfFiles[i].getName());
+        return results;
     }
 
     /**
